@@ -1,10 +1,23 @@
 import { useState } from "react";
 
 const Button = ({ handler, text }) => <button onClick={handler}>{text}</button>;
+
 const Stat = ({ text, score }) => (
   <p>
     {text} {score} {text === "positive" && "%"}
   </p>
+);
+
+const Statistics = (props) => (
+  <>
+    <h1>{props.title}</h1>
+    <Stat text={props.goodText} score={props.goodScore} />
+    <Stat text={props.neutralText} score={props.neutralScore} />
+    <Stat text={props.badText} score={props.badScore} />
+    <Stat text={props.allText} score={props.allScore} />
+    <Stat text={props.averageText} score={props.averageScore} />
+    <Stat text={props.positiveText} score={props.positiveScore} />
+  </>
 );
 
 const App = () => {
@@ -50,13 +63,21 @@ const App = () => {
       <Button handler={setScore("good")} text='good' />
       <Button handler={setScore("neutral")} text='neutral' />
       <Button handler={setScore("bad")} text='bad' />
-      <h1>statistics</h1>
-      <Stat text='good' score={good} />
-      <Stat text='neutral' score={neutral} />
-      <Stat text='bad' score={bad} />
-      <Stat text='all' score={all} />
-      <Stat text='average' score={average} />
-      <Stat text='positive' score={positive} />
+      <Statistics
+        title='statistics'
+        goodText='good'
+        goodScore={good}
+        neutralText='neutral'
+        neutralScore={neutral}
+        badText='bad'
+        badScore={bad}
+        allText='all'
+        allScore={all}
+        averageText='average'
+        averageScore={average}
+        positiveText='positive'
+        positiveScore={positive}
+      />
     </div>
   );
 };
