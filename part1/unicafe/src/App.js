@@ -3,9 +3,12 @@ import { useState } from "react";
 const Button = ({ handler, text }) => <button onClick={handler}>{text}</button>;
 
 const StatisticLine = ({ text, value }) => (
-  <p>
-    {text} {value} {text === "positive" && "%"}
-  </p>
+  <tr>
+    <td>{text}</td>
+    <td>
+      {value} {text === "positive" && "%"}
+    </td>
+  </tr>
 );
 
 const Statistics = (props) => {
@@ -14,12 +17,25 @@ const Statistics = (props) => {
     props.goodScore || props.neutralScore || props.badScore ? (
       <>
         <h1>{props.title}</h1>
-        <StatisticLine text={props.goodText} value={props.goodScore} />
-        <StatisticLine text={props.neutralText} value={props.neutralScore} />
-        <StatisticLine text={props.badText} value={props.badScore} />
-        <StatisticLine text={props.allText} value={props.allScore} />
-        <StatisticLine text={props.averageText} value={props.averageScore} />
-        <StatisticLine text={props.positiveText} value={props.positiveScore} />
+        <table>
+          <tbody>
+            <StatisticLine text={props.goodText} value={props.goodScore} />
+            <StatisticLine
+              text={props.neutralText}
+              value={props.neutralScore}
+            />
+            <StatisticLine text={props.badText} value={props.badScore} />
+            <StatisticLine text={props.allText} value={props.allScore} />
+            <StatisticLine
+              text={props.averageText}
+              value={props.averageScore}
+            />
+            <StatisticLine
+              text={props.positiveText}
+              value={props.positiveScore}
+            />
+          </tbody>
+        </table>
       </>
     ) : (
       <p>No feedback given</p>
