@@ -1,5 +1,14 @@
 import { useState } from "react";
 
+const Section = ({ title, children }) => (
+  <div>
+    <h1>{title}</h1>
+    {children}
+  </div>
+);
+
+const Button = ({ text, handler }) => <button onClick={handler}>{text}</button>;
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -33,10 +42,16 @@ const App = () => {
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {points[selected]} votes</p>
-      <button onClick={handleVoteClick}>vote</button>
-      <button onClick={handleNextClick}>next anecdote</button>
+      <Section title='Anecdote of the day'>
+        <p>{anecdotes[selected]}</p>
+        <p>has {points[selected]} votes</p>
+        <Button handler={handleVoteClick} text='vote' />
+        <Button handler={handleNextClick} text='next anecdote' />
+      </Section>
+      <Section title='Anecdote with most votes'>
+        <p>{anecdotes[points.indexOf(Math.max(...points))]}</p>
+        <p>has {Math.max(...points)} votes</p>
+      </Section>
     </div>
   );
 };
