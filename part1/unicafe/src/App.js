@@ -8,17 +8,24 @@ const Stat = ({ text, score }) => (
   </p>
 );
 
-const Statistics = (props) => (
-  <>
-    <h1>{props.title}</h1>
-    <Stat text={props.goodText} score={props.goodScore} />
-    <Stat text={props.neutralText} score={props.neutralScore} />
-    <Stat text={props.badText} score={props.badScore} />
-    <Stat text={props.allText} score={props.allScore} />
-    <Stat text={props.averageText} score={props.averageScore} />
-    <Stat text={props.positiveText} score={props.positiveScore} />
-  </>
-);
+const Statistics = (props) => {
+  console.log(props);
+  const statisticsMarkup =
+    props.goodScore || props.neutralScore || props.badScore ? (
+      <>
+        <h1>{props.title}</h1>
+        <Stat text={props.goodText} score={props.goodScore} />
+        <Stat text={props.neutralText} score={props.neutralScore} />
+        <Stat text={props.badText} score={props.badScore} />
+        <Stat text={props.allText} score={props.allScore} />
+        <Stat text={props.averageText} score={props.averageScore} />
+        <Stat text={props.positiveText} score={props.positiveScore} />
+      </>
+    ) : (
+      <p>No feedback given</p>
+    );
+  return statisticsMarkup;
+};
 
 const App = () => {
   const [good, setGood] = useState(0);
