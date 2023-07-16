@@ -10,6 +10,19 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
+    const validatedName = newName
+      .toLowerCase()
+      .trim()
+      .split(" ")
+      .filter((char) => char !== "")
+      .join(" ");
+    const personExist = persons.some(
+      (person) => person.name.toLowerCase() === validatedName
+    );
+    if (personExist) {
+      window.alert(`${newName} is already added to phonebook`);
+      return;
+    }
     setPersons(persons.concat({ name: newName }));
     setNewName("");
   };
