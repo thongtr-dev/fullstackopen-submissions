@@ -1,46 +1,75 @@
 import { useState } from "react";
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [contacts, setContacts] = useState([
+    { name: "Arto Hellas", phone: "040-1234567" },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
 
-  const handleOnChange = (event) => {
-    setNewName(event.target.value);
+  const handleOnChange = (state) => {
+    if (state === "name") return (event) => setNewName(event.target.value);
+    if (state === "phone")
+      return (event) => setNewPhoneNumber(event.target.value);
   };
 
-  const addPerson = (event) => {
+  const addcontact = (event) => {
     event.preventDefault();
+    if (!newName.length || !newPhoneNumber.length) {
+      window.alert("Please fill in the required fields.");
+      return;
+    }
     const validatedName = newName
       .toLowerCase()
       .trim()
       .split(" ")
       .filter((char) => char !== "")
       .join(" ");
-    const personExist = persons.some(
-      (person) => person.name.toLowerCase() === validatedName
+    const contactExist = contacts.some(
+      (contact) => contact.name.toLowerCase() === validatedName
     );
-    if (personExist) {
-      window.alert(`${newName} is already added to phonebook`);
+    if (contactExist) {
+      window.alert(`${newName} is already added to phonebook.`);
       return;
     }
-    setPersons(persons.concat({ name: newName }));
+
+    const phoneNumberPattern =
+      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+    if (!phoneNumberPattern.test(newPhoneNumber)) {
+      window.alert(
+        `Invalid phone number "${newPhoneNumber}". Please try again.`
+      );
+      return;
+    }
+
+    setContacts(contacts.concat({ name: newName, phone: newPhoneNumber }));
     setNewName("");
+    setNewPhoneNumber("");
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
+      <form onSubmit={addcontact}>
         <div>
-          name: <input value={newName} onChange={handleOnChange} />
+          name: <input value={newName} onChange={handleOnChange("name")} />
+        </div>
+        <div>
+          number:{" "}
+          <input value={newPhoneNumber} onChange={handleOnChange("phone")} />
         </div>
         <div>
           <button type='submit'>add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.length
-        ? persons.map((person) => <p key={person.name}>{person.name}</p>)
+      {contacts.length
+        ? contacts.map((contact) => (
+            <p key={contact.name}>
+              {contact.name} {contact.phone}
+            </p>
+          ))
         : "..."}
     </div>
   );
