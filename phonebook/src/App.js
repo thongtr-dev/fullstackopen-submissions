@@ -2,15 +2,20 @@ import { useState } from "react";
 
 const App = () => {
   const [contacts, setContacts] = useState([
-    { name: "Arto Hellas", phone: "040-1234567" },
+    { name: "Arto Hellas", phone: "040-123456" },
+    { name: "Ada Lovelace", phone: "39-44-5323523" },
+    { name: "Dan Abramov", phone: "12-43-234345" },
+    { name: "Mary Poppendieck", phone: "39-23-6423122" },
   ]);
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [filter, setFilter] = useState("");
 
   const handleOnChange = (state) => {
     if (state === "name") return (event) => setNewName(event.target.value);
     if (state === "phone")
       return (event) => setNewPhoneNumber(event.target.value);
+    if (state === "filter") return (event) => setFilter(event.target.value);
   };
 
   const addcontact = (event) => {
@@ -48,9 +53,35 @@ const App = () => {
     setNewPhoneNumber("");
   };
 
+  const contactList = () => {
+    if (contacts.length) {
+      if (filter.length) {
+        return contacts
+          .filter((contact) =>
+            contact.name.toLowerCase().includes(filter.toLowerCase())
+          )
+          .map((contact) => (
+            <p key={contact.name}>
+              {contact.name} {contact.phone}
+            </p>
+          ));
+      }
+      return contacts.map((contact) => (
+        <p key={contact.name}>
+          {contact.name} {contact.phone}
+        </p>
+      ));
+    } else return "...";
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <span>
+        filter shown with{" "}
+        <input value={filter} onChange={handleOnChange("filter")} />
+      </span>
+      <h2>Add a new</h2>
       <form onSubmit={addcontact}>
         <div>
           name: <input value={newName} onChange={handleOnChange("name")} />
@@ -64,13 +95,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {contacts.length
-        ? contacts.map((contact) => (
-            <p key={contact.name}>
-              {contact.name} {contact.phone}
-            </p>
-          ))
-        : "..."}
+      {contactList()}
     </div>
   );
 };
