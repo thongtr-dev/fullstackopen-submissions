@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
+import Form from "./components/Form";
+import Contacts from "./components/Contacts";
 
 const App = () => {
   const [contacts, setContacts] = useState([
@@ -18,7 +21,7 @@ const App = () => {
     if (state === "filter") return (event) => setFilter(event.target.value);
   };
 
-  const addcontact = (event) => {
+  const addContact = (event) => {
     event.preventDefault();
     if (!newName.length || !newPhoneNumber.length) {
       window.alert("Please fill in the required fields.");
@@ -53,49 +56,19 @@ const App = () => {
     setNewPhoneNumber("");
   };
 
-  const contactList = () => {
-    if (contacts.length) {
-      if (filter.length) {
-        return contacts
-          .filter((contact) =>
-            contact.name.toLowerCase().includes(filter.toLowerCase())
-          )
-          .map((contact) => (
-            <p key={contact.name}>
-              {contact.name} {contact.phone}
-            </p>
-          ));
-      }
-      return contacts.map((contact) => (
-        <p key={contact.name}>
-          {contact.name} {contact.phone}
-        </p>
-      ));
-    } else return "...";
-  };
-
   return (
     <div>
       <h2>Phonebook</h2>
-      <span>
-        filter shown with{" "}
-        <input value={filter} onChange={handleOnChange("filter")} />
-      </span>
-      <h2>Add a new</h2>
-      <form onSubmit={addcontact}>
-        <div>
-          name: <input value={newName} onChange={handleOnChange("name")} />
-        </div>
-        <div>
-          number:{" "}
-          <input value={newPhoneNumber} onChange={handleOnChange("phone")} />
-        </div>
-        <div>
-          <button type='submit'>add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {contactList()}
+      <Filter filter={filter} handleChange={handleOnChange} />
+      <h3>Add a new</h3>
+      <Form
+        handleSubmit={addContact}
+        newName={newName}
+        newPhoneNumber={newPhoneNumber}
+        handleChange={handleOnChange}
+      />
+      <h3>Numbers</h3>
+      <Contacts contacts={contacts} filter={filter} />
     </div>
   );
 };
