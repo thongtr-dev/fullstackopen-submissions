@@ -1,6 +1,6 @@
 const Contact = ({ contact }) => (
   <p>
-    {contact.name} {contact.number}
+    {contact.name} {contact.phone}
   </p>
 );
 

@@ -51,8 +51,11 @@ const App = () => {
       );
       return;
     }
+    const newContact = { name: newName, phone: newPhoneNumber };
 
-    setContacts(contacts.concat({ name: newName, phone: newPhoneNumber }));
+    axios.post("http://localhost:3001/persons", newContact).then((response) => {
+      setContacts(contacts.concat(response.data));
+    });
     setNewName("");
     setNewPhoneNumber("");
   };
