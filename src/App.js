@@ -8,7 +8,9 @@ const App = () => {
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
-    personService.getAll().then((allContacts) => setContacts(allContacts));
+    personService
+      .getAllContacts()
+      .then((allContacts) => setContacts(allContacts));
   }, []);
 
   const [newName, setNewName] = useState("");
@@ -54,11 +56,20 @@ const App = () => {
     const newContact = { name: newName, phone: newPhoneNumber };
 
     personService
-      .create(newContact)
+      .createContact(newContact)
       .then((returnedContact) => setContacts(contacts.concat(returnedContact)));
 
     setNewName("");
     setNewPhoneNumber("");
+  };
+
+  const deleteContactHandler = (id) => {
+    const matchedContact = contacts.find((contact) => contact.id === id);
+    const isDelete = window.confirm(`Delete ${matchedContact.name}?`);
+    if (isDelete) {
+      personService.deleteContact(id);
+      setContacts(contacts.filter((contact) => contact.id !== id));
+    } else return;
   };
 
   return (
@@ -73,7 +84,11 @@ const App = () => {
         handleChange={handleOnChange}
       />
       <h3>Numbers</h3>
-      <Contacts contacts={contacts} filter={filter} />
+      <Contacts
+        contacts={contacts}
+        filter={filter}
+        deleteContactHandler={deleteContactHandler}
+      />
     </div>
   );
 };
