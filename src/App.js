@@ -30,19 +30,7 @@ const App = () => {
       window.alert("Please fill in the required fields.");
       return;
     }
-    const validatedName = newName
-      .toLowerCase()
-      .trim()
-      .split(" ")
-      .filter((char) => char !== "")
-      .join(" ");
-    const contactExist = contacts.some(
-      (contact) => contact.name.toLowerCase() === validatedName
-    );
-    if (contactExist) {
-      window.alert(`${newName} is already added to phonebook.`);
-      return;
-    }
+    const newContact = { name: newName, phone: newPhoneNumber };
 
     const phoneNumberPattern =
       /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -53,12 +41,53 @@ const App = () => {
       );
       return;
     }
-    const newContact = { name: newName, phone: newPhoneNumber };
 
-    personService
-      .createContact(newContact)
-      .then((returnedContact) => setContacts(contacts.concat(returnedContact)));
+    const validatedName = newName
+      .toLowerCase()
+      .trim()
+      .split(" ")
+      .filter((char) => char !== "")
+      .join(" ");
 
+    const contactExist = contacts.some(
+      (contact) => contact.name.toLowerCase() === validatedName
+    );
+
+    if (contactExist) {
+      const nameToFind = `${newName
+        .trim()
+        .split(" ")
+        .filter((char) => char !== "")
+        .map((word) => word[0].toUpperCase().concat(word.slice(1)))
+        .join(" ")}`;
+
+      const isReplace = window.confirm(
+        `${nameToFind} is already added to phonebook, replace the old number with a new one?`
+      );
+      if (isReplace) {
+        const contactToReplace = contacts.find(
+          (contact) => contact.name === nameToFind
+        );
+        personService
+          .updateContact(contactToReplace.id, {
+            ...contactToReplace,
+            phone: newPhoneNumber,
+          })
+          .then((returnedContact) => {
+            setContacts(
+              contacts.map((contact) =>
+                contact.id === returnedContact.id ? returnedContact : contact
+              )
+            );
+          });
+      } else return;
+    } else {
+      personService
+        .createContact(newContact)
+        .then((returnedContact) =>
+          setContacts(contacts.concat(returnedContact))
+        );
+    }
     setNewName("");
     setNewPhoneNumber("");
   };
