@@ -3,19 +3,21 @@ import personService from "./services/persons";
 import Filter from "./components/Filter";
 import Form from "./components/Form";
 import Contacts from "./components/Contacts";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [contacts, setContacts] = useState([]);
+  const [newName, setNewName] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [filter, setFilter] = useState("");
+  const [noti, setNoti] = useState("");
+  const [isSuccessNoti, setIsSuccessNoti] = useState(false);
 
   useEffect(() => {
     personService
       .getAllContacts()
       .then((allContacts) => setContacts(allContacts));
   }, []);
-
-  const [newName, setNewName] = useState("");
-  const [newPhoneNumber, setNewPhoneNumber] = useState("");
-  const [filter, setFilter] = useState("");
 
   const handleOnChange = (state) => {
     if (state === "name") return (event) => setNewName(event.target.value);
@@ -79,14 +81,18 @@ const App = () => {
                 contact.id === returnedContact.id ? returnedContact : contact
               )
             );
+            setIsSuccessNoti(true);
+            setNoti(`Changed ${returnedContact.name} phone number`);
+            setTimeout(() => setNoti(""), 5000);
           });
       } else return;
     } else {
-      personService
-        .createContact(newContact)
-        .then((returnedContact) =>
-          setContacts(contacts.concat(returnedContact))
-        );
+      personService.createContact(newContact).then((returnedContact) => {
+        setContacts(contacts.concat(returnedContact));
+        setNoti(`Added ${returnedContact.name}`);
+        setTimeout(() => setNoti(""), 5000);
+        setIsSuccessNoti(true);
+      });
     }
     setNewName("");
     setNewPhoneNumber("");
@@ -104,6 +110,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={noti} isSuccess={isSuccessNoti} />
       <Filter filter={filter} handleChange={handleOnChange} />
       <h3>Add a new</h3>
       <Form
