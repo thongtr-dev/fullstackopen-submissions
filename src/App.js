@@ -84,6 +84,18 @@ const App = () => {
             setIsSuccessNoti(true);
             setNoti(`Changed ${returnedContact.name} phone number`);
             setTimeout(() => setNoti(""), 5000);
+            setNewName("");
+            setNewPhoneNumber("");
+          })
+          .catch((error) => {
+            setNoti(
+              `Information of ${contactToReplace.name} has already been removed from server`
+            );
+            setTimeout(() => setNoti(""), 5000);
+            setIsSuccessNoti(false);
+            setContacts(
+              contacts.filter((contact) => contact.id !== contactToReplace.id)
+            );
           });
       } else return;
     } else {
@@ -92,10 +104,10 @@ const App = () => {
         setNoti(`Added ${returnedContact.name}`);
         setTimeout(() => setNoti(""), 5000);
         setIsSuccessNoti(true);
+        setNewName("");
+        setNewPhoneNumber("");
       });
     }
-    setNewName("");
-    setNewPhoneNumber("");
   };
 
   const deleteContactHandler = (id) => {
