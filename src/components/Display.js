@@ -1,8 +1,8 @@
 import OneCountryData from "./OneCountryData";
 import CountryName from "./CountryName";
 
-const Display = ({ countries, inputValue }) => {
-  if (countries) {
+const Display = ({ countries, inputValue, handleClickShowCountry }) => {
+  if (countries && inputValue) {
     if (countries.length > 10) {
       return <p>Too many matches, specify another filter</p>;
     } else if (
@@ -23,6 +23,7 @@ const Display = ({ countries, inputValue }) => {
               <CountryName
                 key={c.name.common.toLowerCase()}
                 countryName={c.name.common}
+                handleClick={() => handleClickShowCountry(c.name.common)}
               />
             ))}
           </ul>

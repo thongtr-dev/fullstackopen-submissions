@@ -14,6 +14,16 @@ const App = () => {
     }
   }, [value]);
 
+  const handleClickShowCountry = (name) => {
+    countryService
+      .getCountry(name)
+      .then((returnedCountry) =>
+        setCountries(
+          countries.filter((c) => c.name.common === returnedCountry.name.common)
+        )
+      );
+  };
+
   const handleChange = (e) => {
     // delay 1s to avoid sending too many requests to the server
     setTimeout(() => setValue(e.target.value), 1000);
@@ -21,7 +31,11 @@ const App = () => {
   return (
     <div>
       <input type='text' onChange={handleChange} />
-      <Display countries={countries} inputValue={value} />
+      <Display
+        countries={countries}
+        inputValue={value}
+        handleClickShowCountry={handleClickShowCountry}
+      />
     </div>
   );
 };
