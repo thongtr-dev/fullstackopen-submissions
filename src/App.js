@@ -9,19 +9,20 @@ const App = () => {
   useEffect(() => {
     if (value) {
       countryService.getAllCountries().then((data) => {
-        setCountries(data.filter((c) => c.name.common.includes(value)));
+        const countries = data.filter((c) => c.name.common.includes(value));
+        if (countries.length === 1) {
+          countryService
+            .getCountry(countries[0].name.common)
+            .then((returnedCountry) => setCountries([returnedCountry]));
+        } else setCountries(countries);
       });
     }
   }, [value]);
 
   const handleClickShowCountry = (name) => {
-    countryService
-      .getCountry(name)
-      .then((returnedCountry) =>
-        setCountries(
-          countries.filter((c) => c.name.common === returnedCountry.name.common)
-        )
-      );
+    countryService.getCountry(name).then((returnedCountry) => {
+      setCountries([returnedCountry]);
+    });
   };
 
   const handleChange = (e) => {

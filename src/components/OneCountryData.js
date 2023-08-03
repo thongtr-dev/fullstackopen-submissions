@@ -19,6 +19,13 @@ const OneCountryData = ({ country }) => {
         ))}
       </ul>
       <img src={`${country.flags.png}`} alt={`${country.name.common} flag`} />
+      <h2>Weather in {country.capital}</h2>
+      <p>temperature {country.capitalWeatherData.temp} Celcius</p>
+      <img
+        src={`https://openweathermap.org/img/wn/${country.capitalWeatherData.icon}@2x.png`}
+        alt='weather condition icon'
+      />
+      <p>wind {country.capitalWeatherData.windSpeed} m/s</p>
     </div>
   );
 };
